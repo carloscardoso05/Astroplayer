@@ -1,0 +1,124 @@
+@startuml
+
+interface List<T>
+
+package aplicacao {
+
+    class App<<singleton>> {
+        - PlayerDeMusica player
+        - List<Playlist> playlists
+        - Estatisticas estatisticas
+        + void adicionarPlaylist(Playlist playlist)
+        + void removerPlaylist(Playlist playlist)
+        + void limparPlaylists()
+        + void salvarPlaylists()
+        + void carregarPlaylists()
+    }
+
+    class PlayerDeMusica<<singleton>> {
+        - ListaNavegavel<Musica> fila
+        + void irParaProxima()
+        + void irParaAnterior()
+        + void tocar()
+        + void tocar(int segundoInicial)
+        + void pausar()
+        + void adicionarNaFila(Musica musica)
+        + void adicionarNaFila(Playlist playlist)
+        + void limparFila()
+        + void removerDaFila(Musica musica)
+    }
+
+    class Estatisticas<<singleton>> {
+        - int reproducoesTotal
+        - int reproducoesMes
+        - Musica musicaMaisTocada
+    }
+
+    package entidades {
+
+        class Musica {
+            - int id
+            - String nome
+            - String artista
+            - String album
+            - String genero
+            - int ano
+            - int duracao
+            - int reproducoes
+            - File arquivo
+        }
+
+        note right of Musica::duracao
+         É a duração da música
+         em segundos
+        end note
+
+        class Playlist {
+            - int id
+            - String nome
+            - ListaNavegavel<Musica> musicas
+            + int getDuracaoTotal()
+            + void adicionarMusica(Musica musica)
+            + void removerMusica(Musica musica)
+            + void limpar()
+        }
+    }
+
+}
+
+package helpers {
+
+    class MusicaHelper<<singleton>> {
+        + Musica carregarMusica(File arquivo)
+        + Musica salvarMusica(File arquivo)
+        + Musica editarTitulo(File arquivo, String nome)
+        + Musica editarArtista(File arquivo, String artista)
+        + Musica editarAlbum(File arquivo, String album)
+        + Musica editarGenero(File arquivo, String genero)
+        + Musica editarAnoLancamento(File arquivo, int ano)
+    }
+
+    class EstatisticaHelper<<singleton>> {
+
+    }
+
+}
+
+package util {
+
+    class ListaNavegavel<T> implements .List<T> {
+        - int indexAtual
+        - List<T> elementos
+        + T getAtual()
+        + T getProximo()
+        + T getAnterior()
+        + T irParaProximo()
+        + T irParaAnterior()
+        + List<T> getTodos()
+    }
+
+    note right of ListaNavegavel::getTodos
+     Retorna uma lista imodificável de
+     todos os elementos da lista
+    end note
+
+}
+
+App "1" *-- "1" PlayerDeMusica
+App "1" *-- "*" Playlist
+App "1" *-- "1" Estatisticas
+App --> MusicaHelper
+App --> EstatisticaHelper
+PlayerDeMusica "1" o-- "*" Musica
+PlayerDeMusica::fila .. ListaNavegavel
+Playlist "1" o-- "*" Musica
+
+note as NotaSingleton
+    Classes com o esteriótipo <<singleton>> são singletons e
+    possuem o seguinte atributo e método:
+    <code>
+    private static T instance
+    public  static T getInstance()
+    </code>
+end note
+@enduml
