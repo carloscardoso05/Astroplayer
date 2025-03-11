@@ -7,7 +7,7 @@ package aplicacao {
     class App<<singleton>> {
         - PlayerDeMusica player
         - List<Playlist> playlists
-        - Estatisticas estatisticas
+        - Estatistica estatisticas
         + void adicionarPlaylist(Playlist playlist)
         + void removerPlaylist(Playlist playlist)
         + void limparPlaylists()
@@ -28,10 +28,11 @@ package aplicacao {
         + void removerDaFila(Musica musica)
     }
 
-    class Estatisticas<<singleton>> {
+    class Estatistica<<singleton>> {
         - int reproducoesTotal
         - int reproducoesMes
-        - Musica musicaMaisTocada
+        - Musica musicaMaisTocadaTotal
+        - Musica musicaMaisTocadaMes
     }
 
     package entidades {
@@ -45,6 +46,7 @@ package aplicacao {
             - int ano
             - int duracao
             - int reproducoes
+            - LocalDateTime adicionadaEm
             - File arquivo
         }
 
@@ -79,7 +81,13 @@ package helpers {
     }
 
     class EstatisticaHelper<<singleton>> {
+        + Estatistica carregarEstatistica()
+        + Estatistica salvarEstatistica(Estatistica estatistica)
+    }
 
+    class PlaylistHelper {
+        + Playlist carregarPlaylists()
+        + Playlist salvarPlaylist(Playlist playlist)
     }
 
 }
@@ -106,9 +114,10 @@ package util {
 
 App "1" *-- "1" PlayerDeMusica
 App "1" *-- "*" Playlist
-App "1" *-- "1" Estatisticas
+App "1" *-- "1" Estatistica
 App --> MusicaHelper
 App --> EstatisticaHelper
+App --> PlaylistHelper
 PlayerDeMusica "1" o-- "*" Musica
 PlayerDeMusica::fila .. ListaNavegavel
 Playlist "1" o-- "*" Musica
