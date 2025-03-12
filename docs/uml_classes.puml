@@ -11,8 +11,6 @@ package aplicacao {
         + void adicionarPlaylist(Playlist playlist)
         + void removerPlaylist(Playlist playlist)
         + void limparPlaylists()
-        + void salvarPlaylists()
-        + void carregarPlaylists()
     }
 
     class PlayerDeMusica<<singleton>> {
