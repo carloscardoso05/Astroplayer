@@ -92,7 +92,7 @@ package helpers {
 
 package DAO {
 
-    class MusicaDAO<<interface>> {
+    interface MusicaDAO {
         + List<Musica> getAllMusicas()
         + Musica getMusicaById(int id)
         + void addMusica(Musica musica)
@@ -100,7 +100,7 @@ package DAO {
         + void deleteMusica(int id)
     }
 
-    class PlaylistDAO<<interface>> {
+    interface PlaylistDAO {
         + List<Playlist> getAllPlaylists()
         + Playlist getPlaylistById(int id)
         + void addPlaylist(Playlist playlist)
@@ -108,7 +108,7 @@ package DAO {
         + void deletePlaylist(int id)
     }
 
-    class EstatisticaDAO<<interface>> {
+    interface EstatisticaDAO {
         + Estatistica getEstatisticas()
         + updateEstatisticas(Estatistica estatistica)
     }
