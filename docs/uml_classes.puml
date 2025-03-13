@@ -90,6 +90,60 @@ package helpers {
 
 }
 
+package DAO {
+
+    class MusicaDAO<<interface>> {
+        + List<Musica> getAllMusicas()
+        + Musica getMusicaById(int id)
+        + void addMusica(Musica musica)
+        + void updateMusica(Musica musica)
+        + void deleteMusica(int id)
+    }
+
+    class PlaylistDAO<<interface>> {
+        + List<Playlist> getAllPlaylists()
+        + Playlist getPlaylistById(int id)
+        + void addPlaylist(Playlist playlist)
+        + void updatePlaylist(Playlist playlist)
+        + void deletePlaylist(int id)
+    }
+
+    class EstatisticaDAO<<interface>> {
+        + Estatistica getEstatisticas()
+        + updateEstatisticas(Estatistica estatistica)
+    }
+
+    class MusicaDAOImpl {
+        - String DS
+        - createTable()
+        + MusicaDAOImpl()
+        + List<Musica> getAllMusicas()
+        + Musica getMusicaById(int id)
+        + void addMusica(Musica musica)
+        + void updateMusica(Musica musica)
+        + void deleteMusica(int id)
+    }
+
+    class PlaylistDAOImpl {
+        - String DS
+        - createTable()
+        + PlaylistDAOImpl()
+        + List<Playlist> getAllPlaylists()
+        + Playlist getPlaylistById(int id)
+        + void addPlaylist(Playlist playlist)
+        + void updatePlaylist(Playlist playlist)
+        + void deletePlaylist(int id)
+    }
+
+    class EstatisticaDAOImpl {
+        - String DS
+        - createTable()
+        + EstatisticaDAOImpl()
+        + Estatistica getEstatisticas()
+        + updateEstatisticas(Estatistica estatistica)
+    }
+}
+
 package util {
 
     class ListaNavegavel<T> extends .ArrayList<T> {
@@ -114,6 +168,9 @@ App --> PlaylistHelper
 PlayerDeMusica "1" o-- "*" Musica
 PlayerDeMusica::fila .. ListaNavegavel
 Playlist "1" o-- "*" Musica
+MusicaDAOImpl ..|> MusicaDAO
+PlaylistDAOImpl ..|> PlaylistDAO
+EstatisticaDAOImpl ..|> EstatisticaDAO
 
 note as NotaSingleton
     Classes com o esteriótipo <<singleton>> são singletons e
