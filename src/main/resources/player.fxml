@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="prog2.astroplayer.ui.MP3Controller"
+      spacing="10"
+      style="-fx-background-color: #f0f0f0;"
+>
+    <padding>
+        <Insets top="10" left="10" bottom="10" right="10"/>
+    </padding>
+
+    <MenuBar>
+        <Menu text="File">
+            <MenuItem text="Open" onAction="#handleOpen"/>
+        </Menu>
+    </MenuBar>
+
+    <HBox spacing="10">
+        <Label text="00:00" fx:id="currentTimeLabel"/>
+        <Slider fx:id="progressSlider" HBox.hgrow="ALWAYS"/>
+        <Label text="00:00" fx:id="totalTimeLabel"/>
+    </HBox>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Play" fx:id="playButton" onAction="#handlePlayPause"/>
+        <Button text="Stop" onAction="#handleStop"/>
+    </HBox>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Volume:"/>
+        <Slider fx:id="volumeSlider" min="0" max="100" value="50"/>
+    </HBox>
+</VBox>
