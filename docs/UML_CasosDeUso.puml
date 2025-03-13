@@ -1,6 +1,7 @@
-@startuml
+@startuml CasosDeUso
 left to right direction
-actor "Usuário" as fc
+actor "Usuário" as A1
+actor "Sistema" as A2 
 
 rectangle AstroPlayer {
   usecase "Upload de música" as UC1
@@ -21,12 +22,15 @@ rectangle AstroPlayer {
   (UC5) .> (UC6) : <<include>>  
 }
 
-fc --> UC1
-fc --> UC2
-fc --> UC3
-fc --> UC4
-fc --> UC5
-fc --> UC6
-fc --> UC7
-fc --> UC9
+A1 --> UC1
+A1 --> UC2
+A1 --> UC3
+A1 --> UC4
+A1 --> UC5
+A1 --> UC6
+A1 --> UC7
+A1 --> UC9
+
+UC10 --> A2
+UC11 --> A2
 @enduml
