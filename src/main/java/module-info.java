@@ -1,6 +1,7 @@
 module prog2.astroplayer {
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.media;
     requires static lombok;
 
 
