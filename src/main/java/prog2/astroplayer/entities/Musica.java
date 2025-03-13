@@ -1,8 +1,15 @@
 package prog2.astroplayer.entities;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.File;
 import java.time.LocalDateTime;
 
+@Builder
+@Getter
+@Setter
 public class Musica {
     private int id;
     private String nome;
@@ -12,6 +19,6 @@ public class Musica {
     private int ano;
     private int duracao;
     private int reproducoes;
-    LocalDateTime adicionadaEm;
-    File arquivo;
+    private LocalDateTime adicionadaEm;
+    private File arquivo;
 }

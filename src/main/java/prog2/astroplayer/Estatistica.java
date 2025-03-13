@@ -1,7 +1,11 @@
 package prog2.astroplayer;
 
+import lombok.Getter;
+import lombok.Setter;
 import prog2.astroplayer.entities.Musica;
 
+@Getter
+@Setter
 public class Estatistica {
     private static Estatistica instance;
     private int reproducoesTotal;
