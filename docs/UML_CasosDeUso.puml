@@ -1,0 +1,32 @@
+@startuml
+left to right direction
+actor "Usuário" as fc
+
+rectangle AstroPlayer {
+  usecase "Upload de música" as UC1
+  usecase "Gerenciar informações da música" as UC2
+  usecase "Pesquisar músicas" as UC3
+  usecase "Controlar música (reproduzir, pausar, pular, voltar)" as UC4
+  usecase "Criar playlist" as UC5
+  usecase "Personalizar playlist" as UC6
+  usecase "Adicionar e remover músicas" as UC7
+  usecase "Verificar estatísticas de uso" as UC9
+  usecase "Registrar estatísticas de uso" as UC10
+  usecase "Fornecer estatísticas de uso" as UC11
+
+  (UC1) .> (UC2) : <<include>>
+  (UC4) .> (UC10) : <<include>> 
+  (UC9) .> (UC11) : <<include>> 
+  (UC5) .> (UC7) : <<include>>  
+  (UC5) .> (UC6) : <<include>>  
+}
+
+fc --> UC1
+fc --> UC2
+fc --> UC3
+fc --> UC4
+fc --> UC5
+fc --> UC6
+fc --> UC7
+fc --> UC9
+@enduml
