@@ -1,4 +1,4 @@
-module prog2.astroplayer.ui {
+module prog2.astroplayer {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.media;
