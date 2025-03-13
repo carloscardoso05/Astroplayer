@@ -1,6 +1,6 @@
 @startuml
 
-interface List<T>
+class ArrayList<T>
 
 package aplicacao {
 
@@ -92,21 +92,16 @@ package helpers {
 
 package util {
 
-    class ListaNavegavel<T> implements .List<T> {
-        - int indexAtual
-        - List<T> elementos
-        + T getAtual()
-        + T getProximo()
-        + T getAnterior()
-        + T irParaProximo()
-        + T irParaAnterior()
-        + List<T> getTodos()
-    }
-
-    note right of ListaNavegavel::getTodos
-     Retorna uma lista imodificável de
-     todos os elementos da lista
-    end note
+    class ListaNavegavel<T> extends .ArrayList<T> {
+            - int indexAtual
+            + T getAtual()
+            + boolean temProximo()
+            + boolean temAnterior()
+            + T irParaProximo()
+            + T irParaAnterior()
+            + T getProximo()
+            + T getAnterior()
+        }
 
 }
 
