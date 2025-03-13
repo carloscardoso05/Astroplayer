@@ -7,7 +7,6 @@ import prog2.util.ListaNavegavel;
 
 import java.util.List;
 
-@Builder
 @Getter
 @Setter
 public class Playlist {
@@ -15,6 +14,7 @@ public class Playlist {
     private String nome;
     private final ListaNavegavel<Musica> musicas = new ListaNavegavel<>();
 
+    @Builder
     public Playlist(int id, String nome, List<Musica> musicas) {
         this.id = id;
         this.nome = nome;
