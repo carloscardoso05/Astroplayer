@@ -21,4 +21,17 @@ public class Musica {
     private int reproducoes;
     private LocalDateTime adicionadaEm;
     private File arquivo;
+
+    public Musica(int id, String nome, String artista, String album, String genero, int ano, int duracao, int reproducoes, String dateTimeStr, String arquivoPath){
+        this.setId(id);
+        this.setNome(nome);
+        this.setArtista(artista);
+        this.setAlbum(album);
+        this.setGenero(genero);
+        this.setAno(ano);
+        this.setDuracao(duracao);
+        this.setReproducoes(reproducoes);
+        this.setAdicionadaEm(LocalDateTime.parse(dateTimeStr));
+        this.setArquivo(new File(arquivoPath));
+    }
 }

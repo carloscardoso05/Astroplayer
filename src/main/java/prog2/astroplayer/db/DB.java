@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class DB {
     private static Connection connection;
-    private static final String url = "jdbc:sqlite:test.db";
+    private static final String url = "jdbc:sqlite:astroplayer.db";
 
     public static Connection getConnection() throws SQLException {
         if (connection == null) {
