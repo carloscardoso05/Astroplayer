@@ -12,7 +12,7 @@ public class MusicController {
         Musica musica = new Musica(0, nome, artista, album, genero, ano, duracao, 0, LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME), arquivoPath);
         MusicDAO musicDAO = new MusicDAOImpl();
 
-        musicDAO.addMusica(musica);
+         musicDAO.addMusica(musica);
         musicDAO.getAllMusicas();
     }
 }
