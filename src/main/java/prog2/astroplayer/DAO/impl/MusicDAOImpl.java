@@ -27,6 +27,8 @@ public class MusicDAOImpl implements MusicDAO {
         try (Connection conn = DB.getConnection()) {
             Statement stmt = conn.createStatement();
             stmt.execute(sql);
+            stmt.close();
+            DB.closeConnection();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -56,8 +58,11 @@ public class MusicDAOImpl implements MusicDAO {
                         rs.getString("adicionada_em"),
                         rs.getString("arquivo")));
             }
+            rs.close();
+            stmt.close();
+            DB.closeConnection();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return musicas;
     }
@@ -104,12 +109,13 @@ public class MusicDAOImpl implements MusicDAO {
             pstmt.setInt(5, musica.getAno());
             pstmt.setInt(6, musica.getDuracao());
             pstmt.setInt(7, 0); // Número de reproduções
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm:ss");
-            pstmt.setString(8, musica.getAdicionadaEm().format(formatter));
+            pstmt.setString(8, LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
             pstmt.setString(9, musica.getArquivo().getAbsolutePath());
             pstmt.executeUpdate();
+            pstmt.close();
+            DB.closeConnection();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -134,8 +140,7 @@ public class MusicDAOImpl implements MusicDAO {
             pstmt.setInt(5, musica.getAno());
             pstmt.setInt(6, musica.getDuracao());
             pstmt.setInt(7, musica.getReproducoes());
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm:ss");
-            pstmt.setString(8, musica.getAdicionadaEm().format(formatter));
+            pstmt.setString(8, musica.getAdicionadaEm().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
             pstmt.setString(9, musica.getArquivo().getAbsolutePath());
             pstmt.setInt(10, musica.getId());
             pstmt.executeUpdate();
