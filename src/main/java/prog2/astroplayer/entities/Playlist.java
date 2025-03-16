@@ -14,7 +14,6 @@ public class Playlist {
     private String nome;
     private final ListaNavegavel<Musica> musicas = new ListaNavegavel<>();
 
-    @Builder
     public Playlist(int id, String nome, List<Musica> musicas) {
         this.id = id;
         this.nome = nome;
@@ -27,6 +26,10 @@ public class Playlist {
 
     public void adicionarMusica(Musica musica) {
         musicas.add(musica);
+    }
+
+    public void adicionarMusicas(List<Musica> musicas) {
+        this.musicas.addAll(musicas);
     }
 
     public void removerMusica(Musica musica) {
