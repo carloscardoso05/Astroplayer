@@ -1,0 +1,31 @@
+.slider {
+    -fx-control-inner-background: #C293FF;
+    -fx-border-radius: 0px; /* Bordas arredondadas */
+    -fx-pref-height: 10px; /* Altura do slider */
+}
+.slider .track {
+    -fx-background-color: #555555; /* Cor do fundo da barra */
+    -fx-background-insets: 0, 1; /* Para ajustar a posição da barra */
+    -fx-background-radius: 0px; /* Remove bordas arredondadas do track */
+}
+.slider .track .increment {
+    -fx-background-color: #8c60c6; /* Cor do progresso */
+    -fx-background-radius: 0px; /* Remove bordas arredondadas da parte preenchida */
+}
+.slider .thumb {
+    -fx-background-color: #C293FF; /* Cor do "thumb" */
+    -fx-background-radius: 0%; /* Tornar o "thumb" redondo */
+    -fx-pref-width: 5px; /* Largura do "thumb" */
+    -fx-pref-height: 20px; /* Altura do "thumb" */
+    -fx-border-width: 0px; /* Largura da borda do "thumb" */
+
+}
+/* Estilo do "thumb" quando o mouse passa por cima */
+.slider .thumb:hover {
+    -fx-background-color: #d9c2f7; /* Cor mais clara do "thumb" */
+}
+
+/* Estilo do "thumb" quando está pressionado */
+.slider .thumb:pressed {
+    -fx-background-color: #9b65e2; /* Cor mais escura do "thumb" */
+}
