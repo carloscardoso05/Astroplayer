@@ -28,7 +28,6 @@ public class MusicDAOImpl implements MusicDAO {
             Statement stmt = conn.createStatement();
             stmt.execute(sql);
             stmt.close();
-            DB.closeConnection();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -60,7 +59,6 @@ public class MusicDAOImpl implements MusicDAO {
             }
             rs.close();
             stmt.close();
-            DB.closeConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -113,7 +111,6 @@ public class MusicDAOImpl implements MusicDAO {
             pstmt.setString(9, musica.getArquivo().getAbsolutePath());
             pstmt.executeUpdate();
             pstmt.close();
-            DB.closeConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }
