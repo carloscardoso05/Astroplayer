@@ -56,6 +56,7 @@ public class Astroplayer extends Application {
         rootLayout = new BorderPane();
         Scene scene = new Scene(rootLayout, 800, 600);
         primaryStage.setScene(scene);
+        scene.getStylesheets().add(getClass().getResource("styles/general.css").toExternalForm());
 
         // Menu de navegação
         MenuBar menuBar = new MenuBar();

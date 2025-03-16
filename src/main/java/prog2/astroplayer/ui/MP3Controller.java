@@ -8,6 +8,8 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
+import javafx.application.Platform;
+import java.net.URL;
 
 import java.io.File;
 
@@ -24,6 +26,19 @@ public class MP3Controller {
 
     @FXML
     public void initialize() {
+    // Aguarda a Scene ser inicializada antes de adicionar o CSS
+    Platform.runLater(() -> {
+        if (root.getScene() != null) {
+            URL cssUrl = getClass().getResource("styles/general.css");
+            if (cssUrl != null) {
+                root.getScene().getStylesheets().add(cssUrl.toExternalForm());
+            } else {
+                System.out.println("Erro: Arquivo style.css não encontrado!");
+            }
+        } else {
+            System.out.println("Erro: Scene ainda não foi definida.");
+        }
+    });
         // Volume control setup
         volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (mediaPlayer != null) {
