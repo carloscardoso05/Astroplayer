@@ -18,6 +18,7 @@ public class DB {
     public static void closeConnection() throws SQLException {
         if (connection != null) {
             connection.close();
+            connection = null;
         }
     }
 }

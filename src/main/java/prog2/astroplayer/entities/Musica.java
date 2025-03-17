@@ -7,7 +7,7 @@ import lombok.Setter;
 import java.io.File;
 import java.time.LocalDateTime;
 
-@Builder
+//@Builder
 @Getter
 @Setter
 public class Musica {

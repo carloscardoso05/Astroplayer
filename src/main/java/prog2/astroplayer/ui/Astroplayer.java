@@ -19,7 +19,8 @@ public class Astroplayer extends Application {
     }
 
     public static void main(String[] args) {
-        MusicController.salvarMusica("nome", "artista", "album", "genero", 2015, 150, "C:/Donwloads/teste.mp3");
+        MusicController musicController = new MusicController();
+        musicController.salvarMusica("nome", "artista", "album", "genero", 2015, 150, "C:/Donwloads/teste.mp3");
         launch(args);
     }
 }

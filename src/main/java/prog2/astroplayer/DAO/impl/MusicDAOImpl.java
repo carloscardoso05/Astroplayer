@@ -30,7 +30,7 @@ public class MusicDAOImpl implements MusicDAO {
             stmt.close();
             DB.closeConnection();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
     }
 
@@ -62,7 +62,7 @@ public class MusicDAOImpl implements MusicDAO {
             stmt.close();
             DB.closeConnection();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
         return musicas;
     }
@@ -90,7 +90,7 @@ public class MusicDAOImpl implements MusicDAO {
                         rs.getString("arquivo"));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
         return musica;
     }
@@ -112,10 +112,11 @@ public class MusicDAOImpl implements MusicDAO {
             pstmt.setString(8, LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
             pstmt.setString(9, musica.getArquivo().getAbsolutePath());
             pstmt.executeUpdate();
+
             pstmt.close();
             DB.closeConnection();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
     }
 
@@ -145,7 +146,7 @@ public class MusicDAOImpl implements MusicDAO {
             pstmt.setInt(10, musica.getId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
     }
 
@@ -158,7 +159,7 @@ public class MusicDAOImpl implements MusicDAO {
             pstmt.setInt(1, id);
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
     }
 }
