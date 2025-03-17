@@ -59,6 +59,9 @@ public class Astroplayer extends Application {
         scene.getStylesheets().add(getClass().getResource("styles/general.css").toExternalForm());
         scene.getStylesheets().add(getClass().getResource("styles/button.css").toExternalForm());
         scene.getStylesheets().add(getClass().getResource("styles/slider.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("styles/table.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("styles/list.css").toExternalForm());
+
 
         // Menu de navegação
         MenuBar menuBar = new MenuBar();

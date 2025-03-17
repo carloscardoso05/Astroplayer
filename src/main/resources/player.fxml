@@ -3,11 +3,12 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="prog2.astroplayer.ui.MP3Controller"
       spacing="10"
-      style="-fx-background-color: #f0f0f0;"
+      style="-fx-background-color:rgb(0, 0, 0);"
 >
     <padding>
         <Insets top="10" left="10" bottom="10" right="10"/>

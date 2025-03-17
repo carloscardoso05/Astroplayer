@@ -1,0 +1,50 @@
+/* ==========================
+   Estilizando a Lista (ListView)
+   ========================== */
+   .list-view {
+    -fx-background-color: #111; /* Fundo escuro */
+    -fx-border-color: #222; /* Borda mais escura */
+}
+
+/* ==========================
+   Estilizando os Itens da Lista
+   ========================== */
+.list-cell {
+    -fx-background-color: transparent; /* Remove fundo branco dos itens */
+    -fx-text-fill: white; /* Cor do texto */
+}
+
+/* Efeito hover ao passar o mouse */
+.list-cell:hover {
+    -fx-background-color: #333;
+}
+
+/* Efeito ao selecionar um item */
+.list-cell:selected {
+    -fx-background-color: #555;
+    -fx-text-fill: cyan;
+}
+
+/* ==========================
+   Estilizando a Tabela (TableView)
+   ========================== */
+.table-view {
+    -fx-background-color: #111; /* Fundo escuro */
+    -fx-border-color: #222; /* Borda escura */
+}
+
+.table-row-cell {
+    -fx-background-color: transparent; /* Remove fundo branco */
+    -fx-text-fill: white;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #555;
+    -fx-text-fill: cyan;
+}
+
+/* Remove o destaque azul quando a lista/tabela é focada */
+.list-view:focused, .table-view:focused {
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+}
