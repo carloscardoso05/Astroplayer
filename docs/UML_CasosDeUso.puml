@@ -7,7 +7,7 @@ rectangle AstroPlayer {
   usecase "Upload de música" as UC1
   usecase "Gerenciar informações da música" as UC2
   usecase "Pesquisar músicas" as UC3
-  usecase "Controlar música (reproduzir, pausar, pular, voltar)" as UC4
+  usecase "Controlar música (reproduzir, pausar, pular, voltar, alterar volume)" as UC4
   usecase "Criar playlist" as UC5
   usecase "Personalizar playlist" as UC6
   usecase "Adicionar e remover músicas" as UC7
