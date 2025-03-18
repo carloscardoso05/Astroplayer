@@ -1,0 +1,32 @@
+@startuml
+hide empty description
+
+[*] --> semMusica
+State semMusica {
+[*] --> parado
+State parado
+}
+
+parado --> musicaNaFila : selecionar música
+
+State musicaNaFila {
+[*] --> pausado
+State pausado
+pausado --> tocandoMusica : play
+tocandoMusica --> pausado : pause
+State tocandoMusica
+tocandoMusica --> tocandoMusica : avançar/retroceder música
+state c <<choice>>
+tocandoMusica --> c : acaba a música
+c --> tocandoMusica : [há música na fila]
+c --> semMusica : [não há música na fila]
+}
+
+note "ações que podem ser feitas \nem qualquer estado do\n programa, como adicionar \numa música não são colocadas\n no diagrama" as N
+
+
+
+musicaNaFila --> [*]
+semMusica --> [*]
+
+@enduml
