@@ -8,25 +8,17 @@ public class DB {
     private static Connection connection;
     private static final String url = "jdbc:sqlite:astroplayer.db";
 
-    public static Connection getConnection() {
+    public static Connection getConnection() throws SQLException {
         if (connection == null) {
-            try {
-                connection = DriverManager.getConnection(url);
-            } catch (SQLException e) {
-                throw new RuntimeException("Erro ao conectar ao banco de dados", e);
-            }
+            connection = DriverManager.getConnection(url);
         }
         return connection;
     }
 
-    public static void closeConnection() {
+    public static void closeConnection() throws SQLException {
         if (connection != null) {
-            try {
-                connection.close();
-                connection = null;
-            } catch (SQLException e) {
-                throw new RuntimeException("Erro ao fechar conexão como banco de dados", e);
-            }
+            connection.close();
+            connection = null;
         }
     }
 }
