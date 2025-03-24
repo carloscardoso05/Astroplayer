@@ -59,9 +59,8 @@ public class Astroplayer extends Application {
         scene.getStylesheets().add(getClass().getResource("styles/general.css").toExternalForm());
         scene.getStylesheets().add(getClass().getResource("styles/button.css").toExternalForm());
         scene.getStylesheets().add(getClass().getResource("styles/slider.css").toExternalForm());
-        scene.getStylesheets().add(getClass().getResource("styles/table.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("styles/slider.css").toExternalForm());
         scene.getStylesheets().add(getClass().getResource("styles/list.css").toExternalForm());
-
 
         // Menu de navegação
         MenuBar menuBar = new MenuBar();
@@ -101,12 +100,12 @@ public class Astroplayer extends Application {
         ListView<Musica> queueList = new ListView<>(currentQueue);
 
         // Controles do player
-        Button playButton = new Button("Tocar");
-        Button pauseButton = new Button("Pausar");
-        Button nextButton = new Button("Próxima");
+        Button playButton = new Button("▶");
+        Button pauseButton = new Button("⏸");
+        Button nextButton = new Button("▶▶");
         Slider progressSlider = new Slider();
         Label currentTime = new Label("00:00");
-        Button previousButton = new Button("Anterior");
+        Button previousButton = new Button("◀◀");
         Slider volumeSlider = new Slider(0, 1, 0.5);
         volumeSlider.setPrefWidth(100);
 

@@ -1,17 +1,26 @@
-.button {
-    -fx-background-color: transparent;
-    background-color: transparent;
-    -fx-background-size: contain;
-    background-size: contain;
-    -fx-background-repeat: no-repeat;
-    background-repeat: no-repeat;
-    -fx-background-position: center;
-    background-position: center;
+/* styles/buttons.css */
+.controls {
+    -fx-background-color: #333;
     -fx-padding: 10px;
-    padding: 10px;
-    -fx-border: none;
-    border: none;
+    -fx-spacing: 10px;
 }
+
+Button {
+    -fx-background-color: #44444400;
+    -fx-text-fill: #C293FF;
+    -fx-font-size: 16px;
+    -fx-padding: 8px 15px;
+    -fx-background-radius: 100px;
+}
+
+Button:hover {
+    -fx-background-color: #8a5dc5;
+}
+
+Button:pressed {
+    -fx-background-color: #9d5cf1;
+}
+
 
 #playButton {
     background-image: url("/prog2/astroplayer/ui/styles/Play.png");
