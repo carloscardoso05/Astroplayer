@@ -27,7 +27,10 @@
     </HBox>
 
     <HBox spacing="10" alignment="CENTER">
-        <Button text="Play" fx:id="playButton" onAction="#handlePlayPause"/>
+        <Button fx:id="backButton" onAction="#handleBack"/>
+        <Button fx:id="playButton" onAction="#handlePlayPause"/>
+        <Button fx:id="pauseButton" onAction="#handlePlayPause"/>
+        <Button fx:id="passButton" onAction="#handlePass"/>
         <Button text="Stop" onAction="#handleStop"/>
     </HBox>
 

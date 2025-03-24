@@ -19,6 +19,9 @@ public class MP3Controller {
     @FXML private Slider progressSlider;
     @FXML private Slider volumeSlider;
     @FXML private Button playButton;
+    @FXML private Button pauseButton;
+    @FXML private Button backButton;
+    @FXML private Button passButton;
 
     private MediaPlayer mediaPlayer;
     private boolean isPlaying = false;
@@ -26,19 +29,19 @@ public class MP3Controller {
 
     @FXML
     public void initialize() {
-    // Aguarda a Scene ser inicializada antes de adicionar o CSS
-    Platform.runLater(() -> {
-        if (root.getScene() != null) {
-            URL cssUrl = getClass().getResource("styles/general.css");
-            if (cssUrl != null) {
-                root.getScene().getStylesheets().add(cssUrl.toExternalForm());
+        // Aguarda a Scene ser inicializada antes de adicionar o CSS
+        Platform.runLater(() -> {
+            if (root.getScene() != null) {
+                URL cssUrl = getClass().getResource("styles/general.css");
+                if (cssUrl != null) {
+                    root.getScene().getStylesheets().add(cssUrl.toExternalForm());
+                } else {
+                    System.out.println("Erro: Arquivo style.css não encontrado!");
+                }
             } else {
-                System.out.println("Erro: Arquivo style.css não encontrado!");
+                System.out.println("Erro: Scene ainda não foi definida.");
             }
-        } else {
-            System.out.println("Erro: Scene ainda não foi definida.");
-        }
-    });
+        });
         // Volume control setup
         volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (mediaPlayer != null) {
@@ -77,6 +80,20 @@ public class MP3Controller {
         stopMedia();
     }
 
+    @FXML
+    private void handleBack() {
+        if (mediaPlayer != null) {
+            mediaPlayer.seek(mediaPlayer.getCurrentTime().subtract(Duration.seconds(10)));
+        }
+    }
+
+    @FXML
+    private void handlePass() {
+        if (mediaPlayer != null) {
+            mediaPlayer.seek(mediaPlayer.getCurrentTime().add(Duration.seconds(10)));
+        }
+    }
+
     private void loadMedia(String mediaUrl) {
         // Clean up previous media player
         if (mediaPlayer != null) {
@@ -113,10 +130,12 @@ public class MP3Controller {
         if (mediaPlayer != null) {
             if (isPlaying) {
                 mediaPlayer.pause();
-                playButton.setText("Play");
+                playButton.setVisible(true);
+                pauseButton.setVisible(false);
             } else {
                 mediaPlayer.play();
-                playButton.setText("Pause");
+                playButton.setVisible(false);
+                pauseButton.setVisible(true);
             }
             isPlaying = !isPlaying;
         }
@@ -125,7 +144,8 @@ public class MP3Controller {
     private void stopMedia() {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
-            playButton.setText("Play");
+            playButton.setVisible(true);
+            pauseButton.setVisible(false);
             isPlaying = false;
             progressSlider.setValue(0);
             currentTimeLabel.setText("00:00");
