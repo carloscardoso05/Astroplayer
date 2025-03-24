@@ -12,7 +12,7 @@ import java.sql.*;
 import java.util.List;
 
 public class PlaylistsMusicasImpl implements PlaylistsMusicasDAO {
-    private static final Connection connection = DB.getConnection();
+//    private static final Connection connection = DB.getConnection();
 
     private void createTable() throws DatabaseException {
         final String sql = """
@@ -24,7 +24,8 @@ public class PlaylistsMusicasImpl implements PlaylistsMusicasDAO {
                     FOREIGN KEY (musica_id) REFERENCES musicas(id)
                 )
                 """;
-        try (final Statement statement = connection.createStatement()) {
+        try (Connection connection = DB.getConnection();) {
+            final Statement statement = connection.createStatement();
             statement.execute(sql);
         } catch (final SQLException e) {
             throw new DatabaseException("Erro ao criar tabela playlist_musicas", e);
@@ -38,7 +39,8 @@ public class PlaylistsMusicasImpl implements PlaylistsMusicasDAO {
     @Override
     public List<Musica> getMusicasFromPlaylistId(int playlistId) {
         final String sql = "SELECT * FROM musicas WHERE id IN (SELECT musica_id FROM playlists_musicas WHERE playlist_id = ?)";
-        try (final PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (Connection connection = DB.getConnection()) {
+            final PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, playlistId);
             final ResultSet resultSet = statement.executeQuery(sql);
             return MusicaConverter.musicasFromResultSet(resultSet);
@@ -50,7 +52,8 @@ public class PlaylistsMusicasImpl implements PlaylistsMusicasDAO {
     @Override
     public List<Playlist> getPlaylistsFromMusicaId(int musicaId) {
         final String sql = "SELECT * FROM playlists WHERE id IN (SELECT playlist_id FROM playlists_musicas WHERE musica_id = ?)";
-        try (final PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (Connection connection = DB.getConnection()) {
+            final PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, musicaId);
             final ResultSet resultSet = statement.executeQuery(sql);
             final List<Playlist> playlists = PlaylistConverter.playlistsFromResultSet(resultSet);
@@ -66,7 +69,8 @@ public class PlaylistsMusicasImpl implements PlaylistsMusicasDAO {
     @Override
     public void updateMusicasFromPlaylist(Playlist playlist) {
         final String sqlDelete = "DELETE FROM playlists_musicas WHERE playlist_id = ?";
-        try (final PreparedStatement statement = connection.prepareStatement(sqlDelete)) {
+        try (Connection connection = DB.getConnection()) {
+            final PreparedStatement statement = connection.prepareStatement(sqlDelete);
             statement.setInt(1, playlist.getId());
             statement.executeUpdate();
         } catch (final SQLException e) {
@@ -74,7 +78,8 @@ public class PlaylistsMusicasImpl implements PlaylistsMusicasDAO {
         }
 
         final String sqlInsert = "INSERT INTO playlists_musicas (playlist_id, musica_id) VALUES (?, ?)";
-        try (final PreparedStatement statement = connection.prepareStatement(sqlInsert)) {
+        try (Connection connection = DB.getConnection()) {
+            final PreparedStatement statement = connection.prepareStatement(sqlInsert);
             for (final Musica musica : playlist.getMusicas()) {
                 statement.setInt(1, playlist.getId());
                 statement.setInt(2, musica.getId());

@@ -10,6 +10,12 @@ import javafx.stage.FileChooser;
 import javafx.util.Duration;
 
 import java.io.File;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import prog2.astroplayer.DAO.impl.MusicDAOImpl;
+import prog2.astroplayer.entities.Musica;
+import prog2.astroplayer.DAO.MusicDAO;
 
 public class MP3Controller {
     @FXML private Label currentTimeLabel;
@@ -48,7 +54,19 @@ public class MP3Controller {
                 new FileChooser.ExtensionFilter("MP3 Files", "*.mp3"));
         File file = fileChooser.showOpenDialog(playButton.getScene().getWindow());
         if (file != null) {
+            String fileName = file.getName();
+            if (fileName.lastIndexOf(".") > 0) {
+                fileName = fileName.substring(0, fileName.lastIndexOf("."));
+            }
+
+            String mediaUri = file.toURI().toString();
+            Media media = new Media(mediaUri);
+
+            int durationSeconds = (int) media.getDuration().toSeconds();
             loadMedia(file.toURI().toString());
+
+            MusicDAO musicDAO = new MusicDAOImpl();
+            musicDAO.addMusica(new Musica(0, fileName, "", "", "", 0, durationSeconds, 0, LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME), file.getAbsolutePath()));
         }
     }
 

@@ -11,7 +11,7 @@ import java.sql.*;
 import java.util.List;
 
 class PlaylistDAOImpl implements PlaylistDAO {
-    private static final Connection connection = DB.getConnection();
+//    private static final Connection connection;
     private static final PlaylistsMusicasDAO playlistsMusicasDAO = new PlaylistsMusicasImpl();
 
     private void createTable() throws DatabaseException {
@@ -22,7 +22,8 @@ class PlaylistDAOImpl implements PlaylistDAO {
                 )
                 """;
 
-        try (final Statement statement = connection.createStatement()) {
+        try (Connection connection = DB.getConnection()) {
+            final Statement statement = connection.createStatement();
             statement.execute(sql);
         } catch (final SQLException e) {
             throw new DatabaseException("Erro ao criar tabela das playlists", e);
@@ -37,7 +38,8 @@ class PlaylistDAOImpl implements PlaylistDAO {
     public List<Playlist> getAllPlaylists() throws DatabaseException {
         final String sql = "SELECT * FROM playlists";
 
-        try (final Statement statement = connection.prepareStatement(sql)) {
+        try (Connection connection = DB.getConnection()) {
+            final Statement statement = connection.prepareStatement(sql);
             final ResultSet resultSet = statement.executeQuery(sql);
             final List<Playlist> playlists = PlaylistConverter.playlistsFromResultSet(resultSet);
             for (final Playlist playlist : playlists) {
@@ -53,7 +55,8 @@ class PlaylistDAOImpl implements PlaylistDAO {
     public Playlist getPlaylistById(int id) {
         final String sql = "SELECT * FROM playlists where id = ?";
 
-        try (final PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (Connection connection = DB.getConnection()) {
+            final PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, id);
             final ResultSet resultSet = statement.executeQuery(sql);
             final Playlist playlist = PlaylistConverter.playlistFromResultSet(resultSet);
@@ -68,7 +71,8 @@ class PlaylistDAOImpl implements PlaylistDAO {
     public void addPlaylist(Playlist playlist) {
         final String sql = "INSERT INTO playlists (nome) VALUES (?)";
 
-        try (final PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection connection = DB.getConnection()) {
+            final PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, playlist.getNome());
             statement.executeUpdate();
             final ResultSet resultSet = statement.getGeneratedKeys();
@@ -88,7 +92,8 @@ class PlaylistDAOImpl implements PlaylistDAO {
     public void updatePlaylist(Playlist playlist) {
         final String sql = "UPDATE playlists SET nome = ? WHERE id = ?";
 
-        try (final PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (Connection connection = DB.getConnection()) {
+            final PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, playlist.getNome());
             statement.setInt(2, playlist.getId());
             statement.executeUpdate();
@@ -103,7 +108,8 @@ class PlaylistDAOImpl implements PlaylistDAO {
     public void deletePlaylist(int id) {
         final String sql = "DELETE FROM playlists WHERE id = ?";
 
-        try (final PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (Connection connection = DB.getConnection()) {
+            final PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, id);
             statement.executeUpdate();
         } catch (final SQLException e) {

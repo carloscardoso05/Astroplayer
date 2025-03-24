@@ -24,9 +24,21 @@ public class Musica {
 
     public Musica(int id, String nome, String artista, String album, String genero, int ano, int duracao, int reproducoes, String dateTimeStr, String arquivoPath){
         this.setId(id);
+        if (nome == null && nome.isEmpty()) {
+            nome = "Desconhecido";
+        }
         this.setNome(nome);
+        if (artista == null && artista.isEmpty()) {
+            artista = "Desconhecido";
+        }
         this.setArtista(artista);
+        if (album == null && album.isEmpty()) {
+            album = "Desconhecido";
+        }
         this.setAlbum(album);
+        if (genero == null && genero.isEmpty()) {
+            genero = "Desconhecido";
+        }
         this.setGenero(genero);
         this.setAno(ano);
         this.setDuracao(duracao);
