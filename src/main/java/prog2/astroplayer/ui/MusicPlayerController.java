@@ -18,6 +18,8 @@ import prog2.astroplayer.PlayerDeMusica;
 import java.util.ArrayList;
 
 public class MusicPlayerController {
+    private static MusicPlayerController instance;
+    
     @FXML
     private TableView<Musica> musicTable;
     @FXML
@@ -45,14 +47,91 @@ public class MusicPlayerController {
     private int currentTrackIndex = -1;
     private final MusicDAO musicDAO = new MusicDAOImpl();
     private double lastVolume = 0.5; // Store the last volume setting
+    private boolean isInitialized = false;
+    private javafx.beans.value.ChangeListener<Duration> timeListener;
+
+    public static MusicPlayerController getInstance() {
+        return instance;
+    }
 
     @FXML
     public void initialize() {
-        todasMusicas.addAll(musicDAO.getAllMusicas());
-        setupMusicTable();
-        setupQueueList();
-        setupControls();
+        if (instance == null) {
+            instance = this;
+            isInitialized = true;
+            todasMusicas.addAll(musicDAO.getAllMusicas());
+            setupMusicTable();
+            setupQueueList();
+            setupControls();
+            updateNavigationButtons();
+        } else {
+            // If we already have an instance, copy the state
+            this.mediaPlayer = instance.mediaPlayer;
+            this.currentTrackIndex = instance.currentTrackIndex;
+            this.lastVolume = instance.lastVolume;
+            this.currentQueue.setAll(instance.currentQueue);
+            this.todasMusicas.setAll(instance.todasMusicas);
+            
+            // Set up UI
+            setupMusicTable();
+            setupQueueList();
+            setupControls();
+            updateNavigationButtons();
+            
+            // Sync UI state
+            syncUIState();
+        }
+    }
+
+    public void syncUIState() {
+        if (mediaPlayer != null) {
+            // Update play/pause button state
+            playPauseButton.setSelected(mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING);
+            
+            // Update time and progress
+            if (mediaPlayer.getCurrentTime() != null) {
+                currentTime.setText(formatTime(mediaPlayer.getCurrentTime()));
+            }
+            if (mediaPlayer.getTotalDuration() != null) {
+                double currentTime = mediaPlayer.getCurrentTime().toSeconds();
+                double totalDuration = mediaPlayer.getTotalDuration().toSeconds();
+                progressSlider.setValue((currentTime / totalDuration) * 100.0);
+            }
+            
+            // Update volume without triggering the listener
+            volumeSlider.setValue(mediaPlayer.getVolume());
+            
+            // Reattach time listener if needed
+            if (timeListener == null) {
+                setupTimeListener();
+            }
+        } else {
+            // Reset UI if no media is playing
+            playPauseButton.setSelected(false);
+            currentTime.setText("00:00");
+            progressSlider.setValue(0);
+            volumeSlider.setValue(lastVolume);
+        }
         updateNavigationButtons();
+    }
+
+    private void setupTimeListener() {
+        if (timeListener != null && mediaPlayer != null) {
+            mediaPlayer.currentTimeProperty().removeListener(timeListener);
+        }
+        
+        timeListener = (obs, oldTime, newTime) -> {
+            if (!progressSlider.isPressed() && mediaPlayer != null && mediaPlayer.getTotalDuration() != null) {
+                double currentTime = newTime.toSeconds();
+                double totalDuration = mediaPlayer.getTotalDuration().toSeconds();
+                progressSlider.setValue((currentTime / totalDuration) * 100.0);
+                this.currentTime.setText(formatTime(newTime));
+            }
+        };
+        
+        if (mediaPlayer != null) {
+            mediaPlayer.currentTimeProperty().addListener(timeListener);
+        }
     }
 
     private void setupMusicTable() {
@@ -118,7 +197,7 @@ public class MusicPlayerController {
 
     private void setupControls() {
         playPauseButton.setOnAction(e -> {
-            if (mediaPlayer != null) {
+            if (mediaPlayer != null && mediaPlayer.getStatus() != null) {
                 if (playPauseButton.isSelected()) {
                     mediaPlayer.play();
                 } else {
@@ -173,7 +252,7 @@ public class MusicPlayerController {
         });
 
         // Set initial volume
-        volumeSlider.setValue(lastVolume * 100.0); // Convert 0-1 range to percentage
+        volumeSlider.setValue(lastVolume);
     }
 
     private void updateNavigationButtons() {
@@ -214,15 +293,7 @@ public class MusicPlayerController {
                 currentTime.setText("00:00");
                 mediaPlayer.play();
                 playPauseButton.setSelected(true);
-            });
-            
-            mediaPlayer.currentTimeProperty().addListener((obs, oldTime, newTime) -> {
-                if (!progressSlider.isPressed() && mediaPlayer.getTotalDuration() != null) {
-                    double currentTime = newTime.toSeconds();
-                    double totalDuration = mediaPlayer.getTotalDuration().toSeconds();
-                    progressSlider.setValue((currentTime / totalDuration) * 100.0);
-                    this.currentTime.setText(formatTime(newTime));
-                }
+                setupTimeListener();
             });
             
             mediaPlayer.setOnEndOfMedia(() -> {

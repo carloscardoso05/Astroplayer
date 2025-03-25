@@ -17,9 +17,23 @@ public class RootLayoutController {
 
     public void showMusicaPlayerScreen() {
         try {
+            // Get the existing controller instance if it exists
+            MusicPlayerController existingController = MusicPlayerController.getInstance();
+            
+            // Load the FXML
             FXMLLoader loader = new FXMLLoader(RootLayoutController.class.getResource("/fxml/music_player.fxml"));
             rootLayout.setCenter(loader.load());
+            
+            // Get the new controller instance
             musicPlayerController = loader.getController();
+            
+            // If we had an existing controller, sync its state
+            if (existingController != null) {
+                // Wait for the new controller to be fully initialized
+                javafx.application.Platform.runLater(() -> {
+                    musicPlayerController.syncUIState();
+                });
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
