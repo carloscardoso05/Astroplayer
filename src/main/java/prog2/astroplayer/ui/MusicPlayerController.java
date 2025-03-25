@@ -51,6 +51,7 @@ public class MusicPlayerController {
         setupMusicTable();
         setupQueueList();
         setupControls();
+        updateNavigationButtons();
     }
 
     private void setupMusicTable() {
@@ -78,7 +79,31 @@ public class MusicPlayerController {
 
             removeItem.setOnAction(e -> {
                 Musica musica = cell.getItem();
+                int index = currentQueue.indexOf(musica);
                 currentQueue.remove(musica);
+                
+                // Handle removal of currently playing song
+                if (index == currentTrackIndex) {
+                    if (mediaPlayer != null) {
+                        mediaPlayer.stop();
+                        mediaPlayer.dispose();
+                        mediaPlayer = null;
+                    }
+                    if (!currentQueue.isEmpty()) {
+                        // If there are more songs, play the next one
+                        tocarMusica(Math.min(index, currentQueue.size() - 1));
+                    } else {
+                        // If queue is empty, reset everything
+                        currentTrackIndex = -1;
+                        playPauseButton.setSelected(false);
+                        currentTime.setText("00:00");
+                        progressSlider.setValue(0);
+                    }
+                } else if (index < currentTrackIndex) {
+                    // If we removed a song before the current one, adjust the index
+                    currentTrackIndex--;
+                }
+                updateNavigationButtons();
             });
 
             contextMenu.getItems().add(removeItem);
@@ -145,6 +170,11 @@ public class MusicPlayerController {
         });
     }
 
+    private void updateNavigationButtons() {
+        nextButton.setDisable(currentTrackIndex >= currentQueue.size() - 1 || currentQueue.isEmpty());
+        previousButton.setDisable(currentTrackIndex <= 0 || currentQueue.isEmpty());
+    }
+
     private String formatTime(Duration duration) {
         int minutes = (int) duration.toMinutes();
         int seconds = (int) duration.toSeconds() % 60;
@@ -187,12 +217,12 @@ public class MusicPlayerController {
             });
             
             if (mediaPlayer != null) {
-                lastVolume = mediaPlayer.getVolume(); // Save current volume before disposing
+                lastVolume = mediaPlayer.getVolume();
                 mediaPlayer.dispose();
             }
             
             mediaPlayer = new MediaPlayer(media);
-            mediaPlayer.setVolume(lastVolume); // Apply the saved volume to new MediaPlayer
+            mediaPlayer.setVolume(lastVolume);
             mediaPlayer.setOnError(() -> {
                 MediaException error = mediaPlayer.getError();
                 System.out.println("\n=== MediaPlayer Error ===");
@@ -212,6 +242,7 @@ public class MusicPlayerController {
             
             mediaPlayer.play();
             playPauseButton.setSelected(true);
+            updateNavigationButtons();
             
             // Update progress slider and time label during playback
             mediaPlayer.currentTimeProperty().addListener((obs, oldTime, newTime) -> {
@@ -230,13 +261,30 @@ public class MusicPlayerController {
                 this.currentTime.setText("00:00");
             });
             
-            mediaPlayer.setOnEndOfMedia(() -> tocarMusica(currentTrackIndex + 1));
+            mediaPlayer.setOnEndOfMedia(() -> {
+                if (currentTrackIndex < currentQueue.size() - 1) {
+                    tocarMusica(currentTrackIndex + 1);
+                } else {
+                    // Stop playback at the end of the queue
+                    mediaPlayer.stop();
+                    mediaPlayer.dispose();
+                    mediaPlayer = null;
+                    playPauseButton.setSelected(false);
+                    currentTime.setText("00:00");
+                    progressSlider.setValue(0);
+                }
+            });
             
         } catch (Exception e) {
             System.err.println("\n=== Exception Details ===");
             System.err.println("Error type: " + e.getClass().getName());
             System.err.println("Error message: " + e.getMessage());
             e.printStackTrace();
+            
+            // Handle playback error by skipping to next song if available
+            if (currentTrackIndex < currentQueue.size() - 1) {
+                tocarMusica(currentTrackIndex + 1);
+            }
         }
     }
 
@@ -245,5 +293,6 @@ public class MusicPlayerController {
         if (currentTrackIndex == -1 && !currentQueue.isEmpty()) {
             tocarMusica(0);
         }
+        updateNavigationButtons();
     }
 }

@@ -107,6 +107,7 @@ public class PlaylistManagementController {
                 playlist.adicionarMusica(selected);
                 playlistDAO.updatePlaylist(playlist);
                 playlistMusicas.getItems().add(selected);
+                playlistList.refresh();
             }
         });
 
@@ -116,6 +117,7 @@ public class PlaylistManagementController {
                 playlist.removerMusica(selecionada);
                 playlistDAO.updatePlaylist(playlist);
                 playlistMusicas.getItems().remove(selecionada);
+                playlistList.refresh();
             }
         });
 
