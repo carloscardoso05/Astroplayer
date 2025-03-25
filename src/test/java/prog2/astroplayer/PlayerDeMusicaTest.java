@@ -18,11 +18,11 @@ class PlayerDeMusicaTest {
     private Playlist playlist;
 
     @BeforeEach
-    void setUp() {
+    void configurar() {
         player = PlayerDeMusica.getInstance();
         player.limparFila();
         
-        // Create test music files with minimum required data
+        // Criar arquivos de música de teste com dados mínimos necessários
         musica1 = new Musica(1, "Teste Música 1", "Artista 1", "Album 1", "Pop", 2024, 180, 0, 
             LocalDateTime.now().toString(), "test1.mp3");
         
@@ -33,51 +33,59 @@ class PlayerDeMusicaTest {
     }
 
     @Test
-    void testGetInstance() {
-        PlayerDeMusica instance1 = PlayerDeMusica.getInstance();
-        PlayerDeMusica instance2 = PlayerDeMusica.getInstance();
-        assertSame(instance1, instance2, "getInstance should return the same instance");
+    void testarObterInstancia() {
+        PlayerDeMusica instancia1 = PlayerDeMusica.getInstance();
+        PlayerDeMusica instancia2 = PlayerDeMusica.getInstance();
+        assertSame(instancia1, instancia2, "getInstance deve retornar a mesma instância");
     }
 
     @Test
-    void testAdicionarNaFila() {
+    void testarAdicionarNaFila() {
         player.adicionarNaFila(musica1);
-        // TODO: Add verification once getters are implemented
-        // For now, we can only test that no exception is thrown
+        assertEquals(1, player.getTamanhoFila(), "A fila deve conter uma música após adicionar");
+        assertEquals(musica1, player.getMusicaAtual(), "A música atual deve ser a primeira adicionada");
     }
 
     @Test
-    void testAdicionarPlaylistNaFila() {
+    void testarAdicionarPlaylistNaFila() {
         player.adicionarNaFila(playlist);
-        // TODO: Add verification once getters are implemented
-        // For now, we can only test that no exception is thrown
+        assertEquals(2, player.getTamanhoFila(), "A fila deve conter duas músicas após adicionar a playlist");
+        assertEquals(musica1, player.getMusicaAtual(), "A primeira música da playlist deve ser a atual");
     }
 
     @Test
-    void testLimparFila() {
+    void testarLimparFila() {
         player.adicionarNaFila(musica1);
         player.adicionarNaFila(musica2);
+        assertEquals(2, player.getTamanhoFila(), "A fila deve conter duas músicas antes de limpar");
+        
         player.limparFila();
-        // TODO: Add verification once getters are implemented
-        // For now, we can only test that no exception is thrown
+        assertEquals(0, player.getTamanhoFila(), "A fila deve estar vazia após limpar");
+        assertNull(player.getMusicaAtual(), "Não deve haver música atual após limpar a fila");
     }
 
     @Test
-    void testRemoverDaFila() {
+    void testarRemoverDaFila() {
         player.adicionarNaFila(musica1);
+        player.adicionarNaFila(musica2);
+        assertEquals(2, player.getTamanhoFila(), "A fila deve conter duas músicas antes de remover");
+        
         player.removerDaFila(musica1);
-        // TODO: Add verification once getters are implemented
-        // For now, we can only test that no exception is thrown
+        assertEquals(1, player.getTamanhoFila(), "A fila deve conter uma música após remover");
+        assertEquals(musica2, player.getMusicaAtual(), "A música atual deve ser a segunda música");
     }
 
     @Test
-    void testNavegacao() {
+    void testarNavegacao() {
         player.adicionarNaFila(musica1);
         player.adicionarNaFila(musica2);
         
+        assertEquals(musica1, player.getMusicaAtual(), "A primeira música deve ser a atual inicialmente");
+        
         player.irParaProxima();
+        assertEquals(musica2, player.getMusicaAtual(), "A segunda música deve ser a atual após avançar");
+        
         player.irParaAnterior();
-        // TODO: Add verification once getters are implemented
-        // For now, we can only test that no exception is thrown
+        assertEquals(musica1, player.getMusicaAtual(), "A primeira música deve ser a atual após voltar");
     }
 } 

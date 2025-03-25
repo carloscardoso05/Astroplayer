@@ -14,7 +14,7 @@ class EstatisticaTest {
     private Musica musica2;
 
     @BeforeEach
-    void setUp() {
+    void configurar() {
         estatistica = Estatistica.getInstance();
         
         musica1 = new Musica(1, "Teste Música 1", "Artista 1", "Album 1", "Pop", 2024, 180, 0,
@@ -25,33 +25,33 @@ class EstatisticaTest {
     }
 
     @Test
-    void testGetInstance() {
-        Estatistica instance1 = Estatistica.getInstance();
-        Estatistica instance2 = Estatistica.getInstance();
-        assertSame(instance1, instance2, "getInstance should return the same instance");
+    void testarObterInstancia() {
+        Estatistica instancia1 = Estatistica.getInstance();
+        Estatistica instancia2 = Estatistica.getInstance();
+        assertSame(instancia1, instancia2, "getInstance deve retornar a mesma instância");
     }
 
     @Test
-    void testReproducoesTotal() {
+    void testarReproducoesTotal() {
         estatistica.setReproducoesTotal(10);
-        assertEquals(10, estatistica.getReproducoesTotal(), "Reproduções total should be updated correctly");
+        assertEquals(10, estatistica.getReproducoesTotal(), "Total de reproduções deve ser atualizado corretamente");
     }
 
     @Test
-    void testReproducoesMes() {
+    void testarReproducoesMes() {
         estatistica.setReproducoesMes(5);
-        assertEquals(5, estatistica.getReproducoesMes(), "Reproduções do mês should be updated correctly");
+        assertEquals(5, estatistica.getReproducoesMes(), "Reproduções do mês devem ser atualizadas corretamente");
     }
 
     @Test
-    void testMusicaMaisTocadaTotal() {
+    void testarMusicaMaisTocadaTotal() {
         estatistica.setMusicaMaisTocadaTotal(musica1);
-        assertEquals(musica1, estatistica.getMusicaMaisTocadaTotal(), "Música mais tocada total should be updated correctly");
+        assertEquals(musica1, estatistica.getMusicaMaisTocadaTotal(), "Música mais tocada no total deve ser atualizada corretamente");
     }
 
     @Test
-    void testMusicaMaisTocadaMes() {
+    void testarMusicaMaisTocadaMes() {
         estatistica.setMusicaMaisTocadaMes(musica2);
-        assertEquals(musica2, estatistica.getMusicaMaisTocadaMes(), "Música mais tocada do mês should be updated correctly");
+        assertEquals(musica2, estatistica.getMusicaMaisTocadaMes(), "Música mais tocada do mês deve ser atualizada corretamente");
     }
 } 
