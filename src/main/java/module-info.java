@@ -7,7 +7,7 @@ module prog2.astroplayer {
     requires mp3agic;
     requires jaudiotagger;
 
-
+    opens prog2.astroplayer.ui to javafx.fxml;
     exports prog2.astroplayer.ui;
     exports prog2.astroplayer.DAO;
     exports prog2.astroplayer.db;

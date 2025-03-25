@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="10" xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="prog2.astroplayer.ui.MusicManagementController">
+    <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+
+    <TableView fx:id="musicTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn text="Nome" fx:id="titleColumn"/>
+            <TableColumn text="Artista" fx:id="artistColumn"/>
+        </columns>
+    </TableView>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Adicionar música" fx:id="addMusicButton"/>
+        <Button text="Remover música" fx:id="removeMusicButton"/>
+    </HBox>
+</VBox> 

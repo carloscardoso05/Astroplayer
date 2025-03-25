@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="10" xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="prog2.astroplayer.ui.MusicPlayerController">
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10"/>
+    </padding>
+
+    <SplitPane VBox.vgrow="ALWAYS">
+        <items>
+            <TableView fx:id="musicTable">
+                <columns>
+                    <TableColumn text="Nome" fx:id="titleColumn"/>
+                    <TableColumn text="Artista" fx:id="artistColumn"/>
+                </columns>
+            </TableView>
+            <ListView fx:id="queueList"/>
+        </items>
+    </SplitPane>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Button text="◀◀" fx:id="previousButton"/>
+        <ToggleButton text="" fx:id="playPauseButton"/>
+        <Button text="▶▶" fx:id="nextButton"/>
+        <Label text="Volume:"/>
+        <Slider fx:id="volumeSlider" min="0" max="1" value="0.5" prefWidth="100"/>
+        <Slider fx:id="progressSlider" HBox.hgrow="ALWAYS"/>
+        <Label fx:id="currentTime" text="00:00"/>
+    </HBox>
+</VBox> 
