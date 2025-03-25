@@ -6,6 +6,9 @@ import javafx.scene.layout.BorderPane;
 
 public class RootLayoutController {
     @FXML private BorderPane rootLayout;
+    
+    private MusicPlayerController musicPlayerController;
+    private PlaylistManagementController playlistController;
 
     @FXML
     public void initialize() {
@@ -16,6 +19,7 @@ public class RootLayoutController {
         try {
             FXMLLoader loader = new FXMLLoader(RootLayoutController.class.getResource("/fxml/music_player.fxml"));
             rootLayout.setCenter(loader.load());
+            musicPlayerController = loader.getController();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -25,6 +29,10 @@ public class RootLayoutController {
         try {
             FXMLLoader loader = new FXMLLoader(RootLayoutController.class.getResource("/fxml/playlist_management.fxml"));
             rootLayout.setCenter(loader.load());
+            playlistController = loader.getController();
+            if (musicPlayerController != null) {
+                playlistController.setMusicPlayerController(musicPlayerController);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

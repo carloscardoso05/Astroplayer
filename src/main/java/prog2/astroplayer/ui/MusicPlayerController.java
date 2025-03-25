@@ -239,4 +239,11 @@ public class MusicPlayerController {
             e.printStackTrace();
         }
     }
+
+    public void addToQueue(java.util.List<Musica> musicas) {
+        currentQueue.addAll(musicas);
+        if (currentTrackIndex == -1 && !currentQueue.isEmpty()) {
+            tocarMusica(0);
+        }
+    }
 }

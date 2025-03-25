@@ -25,6 +25,11 @@ public class PlaylistManagementController {
     private final ObservableList<Playlist> playlists = FXCollections.observableArrayList();
     private final PlaylistDAO playlistDAO = new PlaylistDAOImpl();
     private final MusicDAO musicDAO = new MusicDAOImpl();
+    private MusicPlayerController musicPlayerController;
+
+    public void setMusicPlayerController(MusicPlayerController controller) {
+        this.musicPlayerController = controller;
+    }
 
     @FXML
     public void initialize() {
@@ -35,12 +40,27 @@ public class PlaylistManagementController {
 
     private void setupPlaylistList() {
         playlistList.setItems(playlists);
-        playlistList.setCellFactory(lv -> new ListCell<Playlist>() {
-            @Override
-            protected void updateItem(Playlist item, boolean empty) {
-                super.updateItem(item, empty);
-                setText(empty ? null : item.getNome() + " (" + item.getMusicas().size() + " músicas)");
-            }
+        playlistList.setCellFactory(lv -> {
+            ListCell<Playlist> cell = new ListCell<>() {
+                @Override
+                protected void updateItem(Playlist item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(empty ? null : item.getNome() + " (" + item.getMusicas().size() + " músicas)");
+                }
+            };
+
+            ContextMenu contextMenu = new ContextMenu();
+            MenuItem addToQueueItem = new MenuItem("Adicionar à fila de reprodução");
+            addToQueueItem.setOnAction(e -> {
+                Playlist playlist = cell.getItem();
+                if (playlist != null && musicPlayerController != null) {
+                    musicPlayerController.addToQueue(playlist.getMusicas());
+                }
+            });
+            contextMenu.getItems().add(addToQueueItem);
+
+            cell.setContextMenu(contextMenu);
+            return cell;
         });
 
         playlistList.setOnMouseClicked(e -> {
