@@ -13,6 +13,7 @@ import javafx.util.Duration;
 import prog2.astroplayer.DAO.MusicDAO;
 import prog2.astroplayer.DAO.impl.MusicDAOImpl;
 import prog2.astroplayer.entities.Musica;
+import prog2.astroplayer.PlayerDeMusica;
 
 import java.util.ArrayList;
 
@@ -140,7 +141,9 @@ public class MusicPlayerController {
 
         volumeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
             if (mediaPlayer != null) {
-                mediaPlayer.setVolume(newVal.doubleValue());
+                double volume = newVal.doubleValue() / 100.0; // Convert percentage to 0-1 range
+                mediaPlayer.setVolume(volume);
+                lastVolume = volume;
             }
         });
 
@@ -151,23 +154,26 @@ public class MusicPlayerController {
         });
 
         progressSlider.setOnMouseDragged(e -> {
-            if (mediaPlayer != null) {
-                mediaPlayer.seek(Duration.seconds(
-                    progressSlider.getValue() * mediaPlayer.getTotalDuration().toSeconds() / 100.0
-                ));
+            if (mediaPlayer != null && mediaPlayer.getTotalDuration() != null) {
+                double percentage = progressSlider.getValue();
+                double duration = mediaPlayer.getTotalDuration().toSeconds();
+                mediaPlayer.seek(Duration.seconds(percentage * duration / 100.0));
             }
         });
 
         progressSlider.setOnMouseReleased(e -> {
-            if (mediaPlayer != null) {
-                mediaPlayer.seek(Duration.seconds(
-                    progressSlider.getValue() * mediaPlayer.getTotalDuration().toSeconds() / 100.0
-                ));
+            if (mediaPlayer != null && mediaPlayer.getTotalDuration() != null) {
+                double percentage = progressSlider.getValue();
+                double duration = mediaPlayer.getTotalDuration().toSeconds();
+                mediaPlayer.seek(Duration.seconds(percentage * duration / 100.0));
                 if (playPauseButton.isSelected()) {
                     mediaPlayer.play();
                 }
             }
         });
+
+        // Set initial volume
+        volumeSlider.setValue(lastVolume * 100.0); // Convert 0-1 range to percentage
     }
 
     private void updateNavigationButtons() {
@@ -182,90 +188,47 @@ public class MusicPlayerController {
     }
 
     private void tocarMusica(int index) {
-        if (index < 0 || index >= currentQueue.size())
+        if (index < 0 || index >= currentQueue.size()) {
             return;
+        }
+            
         currentTrackIndex = index;
         Musica music = currentQueue.get(index);
         
         try {
-            System.out.println("=== Debug Information ===");
-            System.out.println("File path: " + music.getArquivo().getAbsolutePath());
-            System.out.println("File exists: " + music.getArquivo().exists());
-            System.out.println("File can read: " + music.getArquivo().canRead());
-            System.out.println("File size: " + music.getArquivo().length() + " bytes");
-            
-            String uri = music.getArquivo().toURI().toString();
-            System.out.println("Media URI: " + uri);
-            
-            // Print system properties
-            System.out.println("\n=== System Properties ===");
-            System.out.println("java.version: " + System.getProperty("java.version"));
-            System.out.println("java.vendor: " + System.getProperty("java.vendor"));
-            System.out.println("os.name: " + System.getProperty("os.name"));
-            System.out.println("os.arch: " + System.getProperty("os.arch"));
-            
-            // Create media with error handling
-            Media media = new Media(uri);
-            media.setOnError(() -> {
-                MediaException error = media.getError();
-                System.out.println("\n=== Media Error ===");
-                System.out.println("Error type: " + error.getType());
-                System.out.println("Error message: " + error.getMessage());
-                if (error.getCause() != null) {
-                    System.out.println("Cause: " + error.getCause().getMessage());
-                }
-            });
-            
             if (mediaPlayer != null) {
-                lastVolume = mediaPlayer.getVolume();
+                mediaPlayer.stop();
                 mediaPlayer.dispose();
             }
             
+            String uri = music.getArquivo().toURI().toString();
+            Media media = new Media(uri);
+            
             mediaPlayer = new MediaPlayer(media);
             mediaPlayer.setVolume(lastVolume);
-            mediaPlayer.setOnError(() -> {
-                MediaException error = mediaPlayer.getError();
-                System.out.println("\n=== MediaPlayer Error ===");
-                System.out.println("Error type: " + error.getType());
-                System.out.println("Error message: " + error.getMessage());
-                if (error.getCause() != null) {
-                    System.out.println("Cause: " + error.getCause().getMessage());
-                }
+            
+            // Set up media player event handlers
+            mediaPlayer.setOnReady(() -> {
+                Duration total = mediaPlayer.getTotalDuration();
+                progressSlider.setValue(0);
+                currentTime.setText("00:00");
+                mediaPlayer.play();
+                playPauseButton.setSelected(true);
             });
             
-            // Add status change listener
-            mediaPlayer.statusProperty().addListener((observable, oldValue, newValue) -> {
-                System.out.println("\n=== MediaPlayer Status Change ===");
-                System.out.println("Old status: " + oldValue);
-                System.out.println("New status: " + newValue);
-            });
-            
-            mediaPlayer.play();
-            playPauseButton.setSelected(true);
-            updateNavigationButtons();
-            
-            // Update progress slider and time label during playback
             mediaPlayer.currentTimeProperty().addListener((obs, oldTime, newTime) -> {
-                if (mediaPlayer.getTotalDuration() != null && !progressSlider.isPressed()) {
+                if (!progressSlider.isPressed() && mediaPlayer.getTotalDuration() != null) {
                     double currentTime = newTime.toSeconds();
                     double totalDuration = mediaPlayer.getTotalDuration().toSeconds();
                     progressSlider.setValue((currentTime / totalDuration) * 100.0);
                     this.currentTime.setText(formatTime(newTime));
                 }
             });
-
-            // Set initial duration once it's available
-            mediaPlayer.setOnReady(() -> {
-                Duration total = mediaPlayer.getTotalDuration();
-                progressSlider.setValue(0);
-                this.currentTime.setText("00:00");
-            });
             
             mediaPlayer.setOnEndOfMedia(() -> {
                 if (currentTrackIndex < currentQueue.size() - 1) {
                     tocarMusica(currentTrackIndex + 1);
                 } else {
-                    // Stop playback at the end of the queue
                     mediaPlayer.stop();
                     mediaPlayer.dispose();
                     mediaPlayer = null;
@@ -275,13 +238,21 @@ public class MusicPlayerController {
                 }
             });
             
-        } catch (Exception e) {
-            System.err.println("\n=== Exception Details ===");
-            System.err.println("Error type: " + e.getClass().getName());
-            System.err.println("Error message: " + e.getMessage());
-            e.printStackTrace();
+            mediaPlayer.setOnError(() -> {
+                MediaException error = mediaPlayer.getError();
+                System.err.println("Media Player Error: " + error.getMessage());
+                // Skip to next track if available
+                if (currentTrackIndex < currentQueue.size() - 1) {
+                    tocarMusica(currentTrackIndex + 1);
+                }
+            });
             
-            // Handle playback error by skipping to next song if available
+            updateNavigationButtons();
+            
+        } catch (Exception e) {
+            System.err.println("Error playing track: " + e.getMessage());
+            e.printStackTrace();
+            // Skip to next track if available
             if (currentTrackIndex < currentQueue.size() - 1) {
                 tocarMusica(currentTrackIndex + 1);
             }

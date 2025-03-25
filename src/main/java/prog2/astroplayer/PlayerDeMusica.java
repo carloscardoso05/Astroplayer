@@ -7,6 +7,7 @@ import prog2.util.ListaNavegavel;
 public class PlayerDeMusica {
     private static PlayerDeMusica instance;
     private final ListaNavegavel<Musica> fila = new ListaNavegavel<>();
+    private boolean isPaused = true;
 
     private PlayerDeMusica() {
     }
@@ -18,42 +19,72 @@ public class PlayerDeMusica {
         return instance;
     }
 
-    void irParaProxima() {
-        fila.irParaProximo();
+    public Musica getMusicaAtual() {
+        if (fila.isEmpty()) {
+            return null;
+        }
+        return fila.getAtual();
     }
 
-    void irParaAnterior() {
-        fila.irParaAnterior();
+    public boolean temProxima() {
+        return fila.temProximo();
     }
 
-    void tocar() {
-        // TODO: implementar
-        throw new UnsupportedOperationException("Not supported yet.");
+    public boolean temAnterior() {
+        return fila.temAnterior();
     }
 
-    void tocar(int segundoInicial) {
-        //TODO: implementar
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Musica irParaProxima() {
+        if (!temProxima()) {
+            return null;
+        }
+        return fila.irParaProximo();
     }
 
-    void pausar() {
-        // TODO: implementar
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Musica irParaAnterior() {
+        if (!temAnterior()) {
+            return null;
+        }
+        return fila.irParaAnterior();
     }
 
-    void adicionarNaFila(Musica musica) {
+    public void tocar() {
+        isPaused = false;
+    }
+
+    public void tocar(int segundoInicial) {
+        isPaused = false;
+    }
+
+    public void pausar() {
+        isPaused = true;
+    }
+
+    public boolean isPaused() {
+        return isPaused;
+    }
+
+    public void adicionarNaFila(Musica musica) {
         fila.add(musica);
     }
 
-    void adicionarNaFila(Playlist playlists) {
+    public void adicionarNaFila(Playlist playlists) {
         fila.addAll(playlists.getMusicas());
     }
 
-    void limparFila() {
+    public void limparFila() {
         fila.clear();
     }
 
-    void removerDaFila(Musica musica) {
+    public void removerDaFila(Musica musica) {
         fila.remove(musica);
+    }
+
+    public int getTamanhoFila() {
+        return fila.size();
+    }
+
+    public boolean filaVazia() {
+        return fila.isEmpty();
     }
 }
