@@ -28,6 +28,7 @@ public class Astroplayer extends Application {
             scene.getStylesheets().add(Astroplayer.class.getResource("/styles/button.css").toExternalForm());
             scene.getStylesheets().add(Astroplayer.class.getResource("/styles/slider.css").toExternalForm());
             scene.getStylesheets().add(Astroplayer.class.getResource("/styles/list.css").toExternalForm());
+            scene.getStylesheets().add(Astroplayer.class.getResource("/styles/table.css").toExternalForm());
 
             primaryStage.show();
         } catch (Exception e) {

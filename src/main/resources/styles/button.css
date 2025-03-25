@@ -20,6 +20,14 @@ Button, ToggleButton {
     -fx-padding: 0;
 }
 
+/* Management buttons style override */
+#addPlaylistButton, #removePlaylistButton, #addMusicButton, #removeMusicButton {
+    -fx-min-width: 120px;
+    -fx-pref-width: -1;
+    -fx-background-radius: 5px;
+    -fx-padding: 8px 16px;
+}
+
 Button:hover, ToggleButton:hover {
     -fx-background-color: #8a5dc5;
 }
