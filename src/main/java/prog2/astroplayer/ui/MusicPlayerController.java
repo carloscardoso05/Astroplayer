@@ -43,6 +43,7 @@ public class MusicPlayerController {
     private final ObservableList<Musica> currentQueue = FXCollections.observableArrayList();
     private int currentTrackIndex = -1;
     private final MusicDAO musicDAO = new MusicDAOImpl();
+    private double lastVolume = 0.5; // Store the last volume setting
 
     @FXML
     public void initialize() {
@@ -186,10 +187,12 @@ public class MusicPlayerController {
             });
             
             if (mediaPlayer != null) {
+                lastVolume = mediaPlayer.getVolume(); // Save current volume before disposing
                 mediaPlayer.dispose();
             }
             
             mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.setVolume(lastVolume); // Apply the saved volume to new MediaPlayer
             mediaPlayer.setOnError(() -> {
                 MediaException error = mediaPlayer.getError();
                 System.out.println("\n=== MediaPlayer Error ===");
