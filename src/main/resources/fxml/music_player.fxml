@@ -24,9 +24,9 @@
     </SplitPane>
 
     <HBox spacing="10" alignment="CENTER_LEFT">
-        <Button text="◀◀" fx:id="previousButton"/>
+        <Button text="" fx:id="previousButton"/>
         <ToggleButton text="" fx:id="playPauseButton"/>
-        <Button text="▶▶" fx:id="nextButton"/>
+        <Button text="" fx:id="nextButton"/>
         <Label text="Volume:"/>
         <Slider fx:id="volumeSlider" min="0" max="1" value="0.5" prefWidth="100"/>
         <Slider fx:id="progressSlider" HBox.hgrow="ALWAYS"/>

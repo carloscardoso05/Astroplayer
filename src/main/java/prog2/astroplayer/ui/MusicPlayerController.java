@@ -141,7 +141,7 @@ public class MusicPlayerController {
 
         volumeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
             if (mediaPlayer != null) {
-                double volume = newVal.doubleValue() / 100.0; // Convert percentage to 0-1 range
+                double volume = newVal.doubleValue(); // Convert percentage to 0-1 range
                 mediaPlayer.setVolume(volume);
                 lastVolume = volume;
             }

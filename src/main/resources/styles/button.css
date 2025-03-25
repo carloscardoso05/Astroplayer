@@ -37,12 +37,12 @@ Button:pressed, ToggleButton:pressed {
 }
 
 #playPauseButton {
-    -fx-background-image: url("../assets/Pause2.png");
+    -fx-background-image: url("../assets/Play2.png");
     -fx-background-size: 24px;
 }
 
 #playPauseButton:selected {
-    -fx-background-image: url("../assets/Play2.png");
+    -fx-background-image: url("../assets/Pause2.png");
 }
 
 #previousButton {
