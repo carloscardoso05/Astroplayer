@@ -120,8 +120,26 @@ public class MusicPlayerController {
 
         progressSlider.setOnMousePressed(e -> {
             if (mediaPlayer != null) {
+                mediaPlayer.pause();
+            }
+        });
+
+        progressSlider.setOnMouseDragged(e -> {
+            if (mediaPlayer != null) {
                 mediaPlayer.seek(Duration.seconds(
-                        progressSlider.getValue() / 100 * mediaPlayer.getTotalDuration().toSeconds()));
+                    progressSlider.getValue() * mediaPlayer.getTotalDuration().toSeconds() / 100.0
+                ));
+            }
+        });
+
+        progressSlider.setOnMouseReleased(e -> {
+            if (mediaPlayer != null) {
+                mediaPlayer.seek(Duration.seconds(
+                    progressSlider.getValue() * mediaPlayer.getTotalDuration().toSeconds() / 100.0
+                ));
+                if (playPauseButton.isSelected()) {
+                    mediaPlayer.play();
+                }
             }
         });
     }
@@ -191,6 +209,23 @@ public class MusicPlayerController {
             
             mediaPlayer.play();
             playPauseButton.setSelected(true);
+            
+            // Update progress slider and time label during playback
+            mediaPlayer.currentTimeProperty().addListener((obs, oldTime, newTime) -> {
+                if (mediaPlayer.getTotalDuration() != null && !progressSlider.isPressed()) {
+                    double currentTime = newTime.toSeconds();
+                    double totalDuration = mediaPlayer.getTotalDuration().toSeconds();
+                    progressSlider.setValue((currentTime / totalDuration) * 100.0);
+                    this.currentTime.setText(formatTime(newTime));
+                }
+            });
+
+            // Set initial duration once it's available
+            mediaPlayer.setOnReady(() -> {
+                Duration total = mediaPlayer.getTotalDuration();
+                progressSlider.setValue(0);
+                this.currentTime.setText("00:00");
+            });
             
             mediaPlayer.setOnEndOfMedia(() -> tocarMusica(currentTrackIndex + 1));
             
