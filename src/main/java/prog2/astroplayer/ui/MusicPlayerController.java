@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.media.Media;
+import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 import prog2.astroplayer.DAO.MusicDAO;
@@ -136,14 +137,68 @@ public class MusicPlayerController {
             return;
         currentTrackIndex = index;
         Musica music = currentQueue.get(index);
-        Media media = new Media(music.getArquivo().toURI().toString());
-
-        if (mediaPlayer != null)
-            mediaPlayer.dispose();
-        mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.play();
-        playPauseButton.setSelected(true);
-
-        mediaPlayer.setOnEndOfMedia(() -> tocarMusica(currentTrackIndex + 1));
+        
+        try {
+            System.out.println("=== Debug Information ===");
+            System.out.println("File path: " + music.getArquivo().getAbsolutePath());
+            System.out.println("File exists: " + music.getArquivo().exists());
+            System.out.println("File can read: " + music.getArquivo().canRead());
+            System.out.println("File size: " + music.getArquivo().length() + " bytes");
+            
+            String uri = music.getArquivo().toURI().toString();
+            System.out.println("Media URI: " + uri);
+            
+            // Print system properties
+            System.out.println("\n=== System Properties ===");
+            System.out.println("java.version: " + System.getProperty("java.version"));
+            System.out.println("java.vendor: " + System.getProperty("java.vendor"));
+            System.out.println("os.name: " + System.getProperty("os.name"));
+            System.out.println("os.arch: " + System.getProperty("os.arch"));
+            
+            // Create media with error handling
+            Media media = new Media(uri);
+            media.setOnError(() -> {
+                MediaException error = media.getError();
+                System.out.println("\n=== Media Error ===");
+                System.out.println("Error type: " + error.getType());
+                System.out.println("Error message: " + error.getMessage());
+                if (error.getCause() != null) {
+                    System.out.println("Cause: " + error.getCause().getMessage());
+                }
+            });
+            
+            if (mediaPlayer != null) {
+                mediaPlayer.dispose();
+            }
+            
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.setOnError(() -> {
+                MediaException error = mediaPlayer.getError();
+                System.out.println("\n=== MediaPlayer Error ===");
+                System.out.println("Error type: " + error.getType());
+                System.out.println("Error message: " + error.getMessage());
+                if (error.getCause() != null) {
+                    System.out.println("Cause: " + error.getCause().getMessage());
+                }
+            });
+            
+            // Add status change listener
+            mediaPlayer.statusProperty().addListener((observable, oldValue, newValue) -> {
+                System.out.println("\n=== MediaPlayer Status Change ===");
+                System.out.println("Old status: " + oldValue);
+                System.out.println("New status: " + newValue);
+            });
+            
+            mediaPlayer.play();
+            playPauseButton.setSelected(true);
+            
+            mediaPlayer.setOnEndOfMedia(() -> tocarMusica(currentTrackIndex + 1));
+            
+        } catch (Exception e) {
+            System.err.println("\n=== Exception Details ===");
+            System.err.println("Error type: " + e.getClass().getName());
+            System.err.println("Error message: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }
