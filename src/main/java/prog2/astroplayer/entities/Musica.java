@@ -35,8 +35,8 @@ public class Musica {
         this.setArquivo(new File(arquivoPath));
     }
 
-    private String getOrDefault(String obj) {
-        return Objects.requireNonNullElse(obj, "Desconhecido");
+    private String getOrDefault(String obj, String fileName) {
+        return Objects.requireNonNullElse(obj, fileName);
     }
 
     private Integer tryParseInt(String obj) {
@@ -49,12 +49,11 @@ public class Musica {
 
     public Musica(File arquivo) {
         try {
-
             final Mp3File mp3File = new Mp3File(arquivo);
-            this.setNome(getOrDefault(mp3File.getId3v2Tag().getTitle()));
-            this.setArtista(getOrDefault(mp3File.getId3v2Tag().getArtist()));
-            this.setAlbum(getOrDefault(mp3File.getId3v2Tag().getAlbum()));
-            this.setGenero(getOrDefault(mp3File.getId3v2Tag().getGenreDescription()));
+            this.setNome(getOrDefault(mp3File.getId3v2Tag().getTitle(), arquivo.getName()));
+            this.setArtista(getOrDefault(mp3File.getId3v2Tag().getArtist(), "Desconhecido"));
+            this.setAlbum(getOrDefault(mp3File.getId3v2Tag().getAlbum(), "Desconhecido"));
+            this.setGenero(getOrDefault(mp3File.getId3v2Tag().getGenreDescription(), "Desconhecido"));
             this.setAno(tryParseInt(mp3File.getId3v2Tag().getYear()));
             this.setDuracao((int) mp3File.getLengthInSeconds());
             this.setReproducoes(0);
