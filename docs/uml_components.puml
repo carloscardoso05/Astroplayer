@@ -1,0 +1,19 @@
+@startuml components
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Person_Ext(user, Usuário)
+
+System_Boundary(app, Astroplayer, "Aplicação de reprodução de mp3"){
+    Component(ui, "Interface gráfica", JavaFX)
+    Component(dao, "Objetos de acesso a dados")
+    Component(db, "Banco de dados", SQLite)
+
+    Rel(ui, dao, Utiliza)
+    Rel(dao, db, Lê/Escreve)
+}
+
+Rel(user, ui, Utiliza)
+
+@enduml
