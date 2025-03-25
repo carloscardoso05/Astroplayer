@@ -1,0 +1,43 @@
+/* styles/buttons.css */
+.controls {
+    -fx-background-color: #333;
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
+}
+
+Button {
+    -fx-background-color: #44444400;
+    -fx-text-fill: #C293FF;
+    -fx-font-size: 16px;
+    -fx-padding: 8px 15px;
+    -fx-background-radius: 100px;
+}
+
+Button:hover {
+    -fx-background-color: #8a5dc5;
+}
+
+Button:pressed {
+    -fx-background-color: #9d5cf1;
+}
+
+
+#playButton {
+    background-image: url("/prog2/astroplayer/ui/styles/Play.png");
+    -fx-background-image: url("/prog2/astroplayer/ui/styles/Play.png");
+}
+
+#pauseButton {
+    background-image: url("/prog2/astroplayer/ui/styles/Pause.png");
+    -fx-background-image: url("/prog2/astroplayer/ui/styles/Pause.png");
+}
+
+#backButton {
+    background-image: url("/prog2/astroplayer/ui/styles/Back.png");
+    -fx-background-image: url("/prog2/astroplayer/ui/styles/Back.png");
+}
+
+#passButton {
+    background-image: url("/prog2/astroplayer/ui/styles/Pass.png");
+    -fx-background-image: url("/prog2/astroplayer/ui/styles/Pass.png");
+}

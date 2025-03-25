@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="10" xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="prog2.astroplayer.ui.PlaylistManagementController">
+    <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+
+    <ListView fx:id="playlistList" VBox.vgrow="ALWAYS"/>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Adicionar Playlist" fx:id="addPlaylistButton"/>
+        <Button text="Remover Playlist" fx:id="removePlaylistButton"/>
+    </HBox>
+</VBox> 

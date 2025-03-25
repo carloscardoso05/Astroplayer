@@ -1,0 +1,48 @@
+/* styles/buttons.css */
+.controls {
+    -fx-background-color: #333;
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
+}
+
+Button, ToggleButton {
+    -fx-background-color: #44444400;
+    -fx-text-fill: #C293FF;
+    -fx-font-size: 16px;
+    -fx-min-width: 40px;
+    -fx-min-height: 40px;
+    -fx-pref-width: 40px;
+    -fx-pref-height: 40px;
+    -fx-background-radius: 100px;
+    -fx-background-size: 24px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+}
+
+Button:hover, ToggleButton:hover {
+    -fx-background-color: #8a5dc5;
+}
+
+Button:pressed, ToggleButton:pressed {
+    -fx-background-color: #9d5cf1;
+}
+
+#playPauseButton {
+    -fx-background-image: url("../assets/Pause2.png");
+    -fx-background-size: 24px;
+}
+
+#playPauseButton:selected {
+    -fx-background-image: url("../assets/Play2.png");
+}
+
+#previousButton {
+    -fx-background-image: url("../assets/Back.png");
+    -fx-background-size: 24px;
+}
+
+#nextButton {
+    -fx-background-image: url("../assets/Pass.png");
+    -fx-background-size: 24px;
+}

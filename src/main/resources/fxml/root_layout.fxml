@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="prog2.astroplayer.ui.RootLayoutController"
+            fx:id="rootLayout">
+    <top>
+        <MenuBar>
+            <Menu text="Navegação">
+                <MenuItem text="Player" onAction="#showMusicaPlayerScreen"/>
+                <MenuItem text="Playlists" onAction="#showPlaylistScreen"/>
+                <MenuItem text="Músicas" onAction="#showMusicaManagementScreen"/>
+            </Menu>
+        </MenuBar>
+    </top>
+</BorderPane> 

@@ -2,24 +2,36 @@ package prog2.astroplayer.ui;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import prog2.astroplayer.controllers.MusicController;
-
-import java.util.Objects;
 
 public class Astroplayer extends Application {
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("player.fxml")));
-        primaryStage.setTitle("FXML MP3 Player");
-        primaryStage.setScene(new Scene(root, 400, 200));
-        primaryStage.show();
-    }
+    private Stage primaryStage;
 
     public static void main(String[] args) {
-        MusicController.salvarMusica("nome", "artista", "album", "genero", 2015, 150, "C:/Donwloads/teste.mp3");
         launch(args);
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+        initRootLayout();
+    }
+
+    private void initRootLayout() {
+        try {
+            FXMLLoader loader = new FXMLLoader(Astroplayer.class.getResource("/fxml/root_layout.fxml"));
+            Scene scene = new Scene(loader.load(), 800, 600);
+            primaryStage.setScene(scene);
+            
+            scene.getStylesheets().add(Astroplayer.class.getResource("/styles/general.css").toExternalForm());
+            scene.getStylesheets().add(Astroplayer.class.getResource("/styles/button.css").toExternalForm());
+            scene.getStylesheets().add(Astroplayer.class.getResource("/styles/slider.css").toExternalForm());
+            scene.getStylesheets().add(Astroplayer.class.getResource("/styles/list.css").toExternalForm());
+
+            primaryStage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
