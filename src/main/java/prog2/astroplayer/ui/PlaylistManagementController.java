@@ -53,8 +53,14 @@ public class PlaylistManagementController {
             MenuItem addToQueueItem = new MenuItem("Adicionar à fila de reprodução");
             addToQueueItem.setOnAction(e -> {
                 Playlist playlist = cell.getItem();
-                if (playlist != null && musicPlayerController != null) {
+                if (playlist != null && musicPlayerController != null && !playlist.getMusicas().isEmpty()) {
                     musicPlayerController.addToQueue(playlist.getMusicas());
+                } else if (playlist != null && playlist.getMusicas().isEmpty()) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Playlist Vazia");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Esta playlist não contém músicas.");
+                    alert.showAndWait();
                 }
             });
             contextMenu.getItems().add(addToQueueItem);

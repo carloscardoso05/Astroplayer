@@ -4,6 +4,7 @@ import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.media.Media;
@@ -59,24 +60,34 @@ public class MusicPlayerController {
         if (instance == null) {
             instance = this;
             isInitialized = true;
-            todasMusicas.addAll(musicDAO.getAllMusicas());
+            refreshMusicTable();
             setupMusicTable();
             setupQueueList();
             setupControls();
             updateNavigationButtons();
+            
+            // Add listener to update navigation buttons when queue changes
+            currentQueue.addListener((javafx.collections.ListChangeListener<Musica>) c -> {
+                updateNavigationButtons();
+            });
         } else {
             // If we already have an instance, copy the state
             this.mediaPlayer = instance.mediaPlayer;
             this.currentTrackIndex = instance.currentTrackIndex;
             this.lastVolume = instance.lastVolume;
             this.currentQueue.setAll(instance.currentQueue);
-            this.todasMusicas.setAll(instance.todasMusicas);
+            refreshMusicTable();
             
             // Set up UI
             setupMusicTable();
             setupQueueList();
             setupControls();
             updateNavigationButtons();
+            
+            // Add listener to update navigation buttons when queue changes
+            currentQueue.addListener((javafx.collections.ListChangeListener<Musica>) c -> {
+                updateNavigationButtons();
+            });
             
             // Sync UI state
             syncUIState();
@@ -153,9 +164,35 @@ public class MusicPlayerController {
     private void setupQueueList() {
         queueList.setItems(currentQueue);
         queueList.setCellFactory(lv -> {
-            ListCell<Musica> cell = new ListCell<>();
+            ListCell<Musica> cell = new ListCell<>() {
+                @Override
+                protected void updateItem(Musica item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setText(null);
+                        setGraphic(null);
+                        setStyle("");
+                    } else {
+                        setText(item.getNome() + " - " + item.getArtista());
+                        // Highlight currently playing song
+                        if (currentQueue.indexOf(item) == currentTrackIndex) {
+                            setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
+                        } else {
+                            setStyle("");
+                        }
+                    }
+                }
+            };
+
+            // Disable selection highlighting
+            cell.setOnMousePressed(e -> {
+                if (e.isPrimaryButtonDown()) {
+                    e.consume();
+                }
+            });
+
             ContextMenu contextMenu = new ContextMenu();
-            MenuItem removeItem = new MenuItem("Remove from queue");
+            MenuItem removeItem = new MenuItem("Remover da lista");
 
             removeItem.setOnAction(e -> {
                 Musica musica = cell.getItem();
@@ -294,6 +331,7 @@ public class MusicPlayerController {
                 mediaPlayer.play();
                 playPauseButton.setSelected(true);
                 setupTimeListener();
+                queueList.refresh(); // Refresh to update highlighting
             });
             
             mediaPlayer.setOnEndOfMedia(() -> {
@@ -306,6 +344,8 @@ public class MusicPlayerController {
                     playPauseButton.setSelected(false);
                     currentTime.setText("00:00");
                     progressSlider.setValue(0);
+                    currentTrackIndex = -1;
+                    queueList.refresh(); // Refresh to update highlighting
                 }
             });
             
@@ -319,6 +359,7 @@ public class MusicPlayerController {
             });
             
             updateNavigationButtons();
+            queueList.refresh(); // Refresh to update highlighting
             
         } catch (Exception e) {
             System.err.println("Error playing track: " + e.getMessage());
@@ -336,5 +377,9 @@ public class MusicPlayerController {
             tocarMusica(0);
         }
         updateNavigationButtons();
+    }
+
+    public void refreshMusicTable() {
+        todasMusicas.setAll(musicDAO.getAllMusicas());
     }
 }

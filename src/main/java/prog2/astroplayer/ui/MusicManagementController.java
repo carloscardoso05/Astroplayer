@@ -49,6 +49,12 @@ public class MusicManagementController {
                     Musica music = new Musica(file);
                     musicDAO.addMusica(music);
                     todasMusicas.add(music);
+                    
+                    // Refresh the player screen
+                    MusicPlayerController playerController = MusicPlayerController.getInstance();
+                    if (playerController != null) {
+                        playerController.refreshMusicTable();
+                    }
                 } catch (Exception ex) {
                     showErrorDialog("Erro", "Não foi possível adicionar a música", ex.getMessage());
                 }
@@ -60,6 +66,12 @@ public class MusicManagementController {
             if (selecionada != null) {
                 todasMusicas.remove(selecionada);
                 musicDAO.deleteMusica(selecionada.getId());
+                
+                // Refresh the player screen
+                MusicPlayerController playerController = MusicPlayerController.getInstance();
+                if (playerController != null) {
+                    playerController.refreshMusicTable();
+                }
             }
         });
     }

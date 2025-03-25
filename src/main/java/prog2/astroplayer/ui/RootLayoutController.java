@@ -41,11 +41,20 @@ public class RootLayoutController {
 
     public void showPlaylistScreen() {
         try {
+            // Ensure we have a music player controller
+            if (musicPlayerController == null) {
+                showMusicaPlayerScreen();
+            }
+            
             FXMLLoader loader = new FXMLLoader(RootLayoutController.class.getResource("/fxml/playlist_management.fxml"));
             rootLayout.setCenter(loader.load());
             playlistController = loader.getController();
+            
+            // Set the music player controller and ensure it's properly initialized
             if (musicPlayerController != null) {
                 playlistController.setMusicPlayerController(musicPlayerController);
+            } else {
+                System.err.println("Warning: musicPlayerController is null when showing playlist screen");
             }
         } catch (Exception e) {
             e.printStackTrace();
